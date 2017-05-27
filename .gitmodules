@@ -1,9 +1,9 @@
 [submodule "Moses-API"]
 	path = Moses-API
 	url = https://github.com/miguelemosreverte/Moses-API
-[submodule "web/public/TTT_public_folder"]
-	path = web/public/TTT_public_folder
-	url = https://github.com/miguelemosreverte/TTT_public_folder
+[submodule "web/public/MTTT_public_folder"]
+	path = web/public/MTTT_public_folder
+	url = https://github.com/miguelemosreverte/MTTT_public_folder
 [submodule "web/app/views/MTTT_views"]
 	path = web/app/views/MTTT_views
 	url = https://github.com/miguelemosreverte/MTTT_views
