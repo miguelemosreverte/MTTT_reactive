@@ -1,9 +1,266 @@
-@(form: Form[controllers.FormData],postRoute:String="")
 
-@main("Welcaadasdome to Play") {
+@(form: Form[controllers.FormData])(implicit messages: play.i18n.Messages)
 
-  <form action= @postRoute  method="post" enctype="multipart/form-data">
-  <input type="file" name="name" style="float:left" >
-    <input  type="submit" value="Submit" style="float:left">
+@main("MTTT - Machine Translation Training Tool") {
+<div class="container body-content">
+ <div class="form-horizontal" style="float:right">
+  <div class="input-group">
+   <input type="text" class="form-control" placeholder="Username" id="upload_username_input">
+   <span class="input-group-btn" style="width:0;">
+                       <button id="upload_username_button" class="btn btn-default" type="button">Login</button>
+                   </span>
+  </div>
+ </div>
+</div>
+
+<ul id="myTab" class="nav nav-tabs">
+ <li class="active">
+  <a href="#home" data-toggle="tab">
+   Corpus Preparation
+  </a>
+ </li>
+
+ <li><a href="#Training" data-toggle="tab">Training</a></li>
+ <li><a href="#MachineTranslation" data-toggle="tab">Machine Translation</a></li>
+ <li><a href="#Evaluation" data-toggle="tab">Evaluation</a></li>
+ <li><a href="#PostEdition" data-toggle="tab">Post-Editing</a></li>
+ <li><a href="#Differences" data-toggle="tab">Differences</a></li>
+ <li><a href="#Statistics" data-toggle="tab">Statistics</a></li>
+
+</ul>
+
+
+<div id="myTabContent" class="tab-content">
+ <div class="tab-pane fade in active" id="home">
+
+  <form id="CorpusPreparationForm" method="post">
+
+   <div class="row">
+    <div class="col-sm-3">
+     <fieldset><legend>Languages</legend>
+      Source
+      <select id="source_lang">
+      </select>
+      <br>
+      Target&nbsp;
+      <select id="target_lang">
+      </select>
+     </fieldset>
+    </div>
+    <div class="col-sm-9">
+
+     <fieldset><legend>Model Name</legend>
+      <span><input type="text" id="LM_name" name="LM_name" style="width:50%"></span>
+      <span><button style="width:40%;margin: 0px 0 0px 0px;display:None">Start Corpus Preparation</button></span>
+      <span><button id="CorpusLoading" class="buttonload"><i class="fa fa-circle-o-notch fa-spin"></i></button></span>
+     </fieldset>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-sm-6">
+     <fieldset><legend>Results</legend>
+      <div id="CorpusPreparationResults" class="well" style="  height:100%; min-height:340px; width:100%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;"></div>
+     </fieldset>
+    </div>
+    <div class="col-sm-6">
+
+     <div class="row">
+
+      <fieldset><legend>Corpus for Translation Model</legend>
+       <div class=pseudo_legend> Source Text</div><br>
+       <input type="file" class="files" name="TM_source">
+       <div id="progress_bar"><div class="percent">0%</div></div>
+       <div class=pseudo_legend> Target Text</div><br>
+       <input type="file" class="files" name="TM_target">
+       <div id="progress_bar"><div class="percent">0%</div></div>
+      </fieldset>
+     </div>
+     <div class="row">
+      <fieldset><legend>Corpus for Language Model</legend>
+       <input type="file" class="files" name="LM">
+       <div id="progress_bar"><div class="percent">0%</div></div>
+      </fieldset>
+     </div>
+     <div class="row">
+     </div>
+    </div>
+   </div>
+
   </form>
+
+ </div>
+
+
+ <div class="tab-pane fade" id="Training">
+  <div class="tab-pane fade in active" id="home">
+   <fieldset style="width:50%"><legend>Training</legend>
+    <span><button id="TrainingButton">Start</button></span>
+    <span><button id="TrainingLoading" class="buttonload"><i class="fa fa-circle-o-notch fa-spin"></i></button></span>
+   </fieldset>
+
+   <div id="TrainingResults" class="well" style="  height:100%; width:100%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;"></div>
+
+  </div>
+ </div>
+
+ <div class="tab-pane fade" id="MachineTranslation">
+  <fieldset style="width:50%"><legend>Choose a model to translate</legend>
+   <input type="file" class="files"  name="MT">
+   <div id="progress_bar"><div class="percent">0%</div></div>
+   <br>
+   <span><select id="select_LM"></select></span>
+   <span>  <button  id="download_LM" style="visibility:hidden; width:150px"><i class="fa fa-file-archive-o"></i>&nbsp;&nbsp;Download</button></span>
+   <button  id="StartMachineTranslation">Start translation</button>
+   <span><button id="MachineTranslationLoading" class="buttonload"><i class="fa fa-circle-o-notch fa-spin"></i></button></span>
+  </fieldset>
+
+  <div id="MachineTranslationResults" class="well" style="  height:100%; width:100%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;"></div>
+
+ </div>
+
+ <div class="tab-pane fade" id="Evaluation">
+  <form id="EvaluationForm" method="post">
+
+   <div class="row">
+    <div class="col-sm-6">
+     <fieldset id="EvaluationFiles"><legend></legend>
+      <div id="EvaluationFilesMenu">
+       <div class=pseudo_legend> Source</div>
+       <input type="file" class="files"  name="UneditedMT">
+       <div id="progress_bar"><div class="percent">0%</div></div><br><br><br>
+       <div class=pseudo_legend> Target</div>
+       <input type="file" class="files"  name="EditedMT">
+       <div id="progress_bar"><div class="percent">0%</div></div>
+       <span><button id="EvaluateButton">Evaluate</button></span>
+       <span><button id="EvaluateLoading" class="buttonload"><i class="fa fa-circle-o-notch fa-spin"></i></button></span>
+
+      </div>
+     </fieldset>
+    </div>
+    <div class="col-sm-6">
+     <fieldset id="EvaluationCheckboxes"><legend>Select automatic metrics</legend>
+      WER <input type="checkbox" value="WER" name="WER">
+      PER <input type="checkbox" value="PER" name="PER">
+      HTER <input type="checkbox" value="TER" name="HTER">
+      <br>
+      BLEU <input type="checkbox" value="BLEU" name="BLEU">
+      BLEU2GRAM <input type="checkbox" value="BLEU2GRAM" name="BLEU2GRAM">
+      BLEU3GRAM <input type="checkbox" value="BLEU3GRAM" name="BLEU3GRAM">
+      BLEU4GRAM <input type="checkbox" value="BLEU4GRAM" name="BLEU4GRAM">
+     </fieldset>
+    </div>
+   </div>
+
+   <div class="row">
+    <div class="col-sm-12">
+
+     <fieldset><legend>Results</legend>
+      <div id="EvaluationResults" class="well" style="  height:100%; min-height:340px; width:100%;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;"></div>
+     </fieldset>
+    </div>
+   </div>
+
+  </form>
+ </div>
+
+ <div class="tab-pane fade" id="PostEdition">
+
+  <div class="row">
+   <div class="col-sm-6">
+    <fieldset><legend></legend>
+
+     <input id="BilingualPE"
+            style="float:right;margin-top:1px;margin-left:5px;"
+            type="checkbox"
+            onclick="if (!this.checked){
+                              $('#Translated_PE_menu').css('visibility','hidden');
+                              }else{
+                              $('#Translated_PE_menu').css('visibility','visible');
+                              }">
+     <div style="float:right" class=pseudo_legend> Bilingual</div><br>
+
+     <div class=pseudo_legend> MT</div>
+     <input id="Untranslated_PE" type="file" class="files" name="Translated_PE">
+     <div id="progress_bar"><div class="percent">0%</div></div><br><br><br>
+
+
+     <div id="Translated_PE_menu" style="visibility:hidden;">
+      <div class=pseudo_legend> Source</div>
+      <input id="Translated_PE" type="file" class="files" name="Untranslated_PE">
+      <div id="progress_bar"><div class="percent">0%</div></div>
+     </div>
+
+     <button  id="StartPostEditing">Start post-editing</button>
+     <button style="display:none" id="SavePostEditionButton">Save</button>
+    </fieldset>
+   </div>
+
+  </div>
+  <div class="row">
+   <div class="resizableFieldSetContainer" style="position:absolute;width:100%">
+    <fieldset class="resizableFieldSet" style=" width:80% !important;float: left;"><legend></legend>
+     <div id="scrollContentPostEditionTable">
+      <table class="tableSection" id="PostEditionTable"></table>
+     </div>
+    </fieldset>
+    <fieldset class="resizableFieldSet2"><legend></legend>
+     <input type="text" class="Search" id="PostEditionSearch" placeholder="Search here:">
+     <table class="tableSection" id="PostEditionSearchTable" style="float: right;"></table>
+    </fieldset>
+   </div>
+  </div>
+ </div>
+
+ <div class="tab-pane fade" id="Differences">
+
+  <div class="row">
+   <div class="resizableFieldSetContainer" style="position:absolute;width:100%">
+    <fieldset class="resizableFieldSet" style=" width:80% !important;float: left;"><legend></legend>
+     <div id="scrollContentDifferencesTable">
+      <table class="tableSection" id="DifferencesTable"></table>
+     </div>
+    </fieldset>
+    <fieldset class="resizableFieldSet2"><legend></legend>
+     <input type="text" class="Search" id="DifferencesSearch" placeholder="Search here:">
+     <table class="tableSection" id="DifferencesSearchTable" style="float: right;"></table>
+    </fieldset>
+   </div>
+  </div>
+ </div>
+
+ <div class="tab-pane fade" id="Statistics">
+
+  <div class="row">
+   <div class="Additions">
+    <fieldset class="resizableFieldSet" style=" width:20% !important;float: left;"><legend></legend>
+     <input type="text" class="Search"  id="StatisticsSearch1" placeholder="Search here:">
+     <table class="tableSection" id="StatisticsSearch1Table" style="float: right;"></table>
+    </fieldset>
+    <div id="additions_pie_chart" class="pie_chart"></div>
+   </div>
+  </div>
+
+  <div class="row">
+   <div class="Deletions">
+    <fieldset class="resizableFieldSet" style=" width:20% !important;float: left;"><legend></legend>
+     <input type="text" class="Search" id="StatisticsSearch2" placeholder="Search here:">
+     <table class="tableSection" id="StatisticsSearch2Table" style="float: right;"></table>
+    </fieldset>
+    <div id="deletions_pie_chart" class="pie_chart"></div>
+   </div>
+  </div>
+
+  <div class="row">
+   <div class="Mix">
+    <fieldset class="resizableFieldSet" style=" width:20% !important;float: left;"><legend></legend>
+     <input type="text" class="Search" id="StatisticsSearch3" placeholder="Search here:">
+     <table class="tableSection" id="StatisticsSearch3Table" style="float: right;"></table>
+    </fieldset>
+    <div id="mix_pie_chart" class="pie_chart"></div>
+   </div>
+  </div>
+
+ </div>
+ <!-- maybe this could work? <a class="arrow_box" href="https://github.com/miguelemosreverte/TTT_electron">Windows-only standalone version<a>-->
+
 }

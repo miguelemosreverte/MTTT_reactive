@@ -1,4 +1,5 @@
 web/target
 web/project/target
 web/project/project/target
-
+web/logs
+web/.idea
