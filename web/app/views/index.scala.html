@@ -1,0 +1,9 @@
+@(form: Form[controllers.FormData],postRoute:String="")
+
+@main("Welcaadasdome to Play") {
+
+  <form action= @postRoute  method="post" enctype="multipart/form-data">
+  <input type="file" name="name" style="float:left" >
+    <input  type="submit" value="Submit" style="float:left">
+  </form>
+}
