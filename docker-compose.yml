@@ -5,10 +5,11 @@ services:
     volumes:
       - "./web:/src/app"
     ports:
-      - "3030:3000"
+      - "9000:9000"
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.4
+        ipv4_address: 10.6.0.4
+    tty: true
 
   moses_api:
     build: ./Moses-API/
@@ -18,18 +19,17 @@ services:
       - "5000:5000"
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.5
+        ipv4_address: 10.6.0.5
 
   corpus_preparation_upload:
     build: ./CorpusPreparationUpload/
-
     volumes:
       - data-volume:/var/lib/moses_api_backup
     ports:
-      - "9000:9000"
+      - "9001:9000"
     networks:
       vpcbr:
-        ipv4_address: 10.5.0.6
+        ipv4_address: 10.6.0.6
     tty: true
 
 
@@ -41,5 +41,5 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 10.5.0.0/16
-         gateway: 10.5.0.1
+       - subnet: 10.6.1.0/16
+         gateway: 10.6.0.1
